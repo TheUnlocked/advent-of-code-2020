@@ -1,9 +1,7 @@
 import load from '../util/load.js';
 export default undefined;
 
-const lines = load(3).split('\n').map(x => x.trim());
-
-const grid = lines.map(x => x.split('').map(x => x === '#'));
+const grid = load(3).grid.deepMap(x => x === '#');
 
 let y = 0;
 let x = 0;

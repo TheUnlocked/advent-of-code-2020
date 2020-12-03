@@ -1,7 +1,7 @@
 import load from '../util/load.js';
 export default undefined;
 
-const lines = load(2).split('\n').map(x => x.trim());
+const lines = load(2).lines;
 
 let valid = 0;
 for (const line of lines) {
