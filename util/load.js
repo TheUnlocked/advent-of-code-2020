@@ -25,6 +25,26 @@ export default function load(dayNumber) {
                 grid.deepMap = deepMap;
                 return grid;
             })();
+        },
+        /** @type {(splitter?: string | ((line: string) => boolean)) => string[][]} */
+        split(splitter = "") {
+            if (typeof splitter === 'string') {
+                const v = splitter;
+                splitter = x => x === v;
+            }
+            const groups = [];
+            let group = [];
+            for (const line of obj.lines) {
+                if (splitter(line)) {
+                    groups.push(group);
+                    group = []
+                }
+                else {
+                    group.push(line);
+                }
+            }
+            if (group.length > 0) groups.push(group);
+            return groups;
         }
     };
     return obj;
