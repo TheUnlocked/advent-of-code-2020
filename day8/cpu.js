@@ -4,12 +4,14 @@ export default class Computer {
     instructions;
 
     visited;
+    iteration;
 
     constructor(instructions = []) {
         this.instructions = instructions;
         this.ptr = 0;
         this.acc = 0;
         this.visited = {};
+        this.iteration = 0;
     }
 
     run() {
@@ -27,23 +29,23 @@ export default class Computer {
         if (this.terminated) return 'terminate';
         if (this.inCycle) return 'cycle';
 
-        this.visited[this.ptr] = true;
+        this.visited[this.ptr] = this.iteration++;
         const didJump = this.execInstruction(this.instructions[this.ptr]);
         if (!didJump) this.ptr++;
         return 'ok';
     }
 
     get inCycle() {
-        return this.visited[this.ptr] ?? false;
+        return this.visited[this.ptr] !== undefined;
     }
 
     get terminated() {
         return this.ptr < 0 || this.ptr >= this.instructions.length;
     }
     
-    /** @type {(instruction: string) => boolean} */
+    /** @type {(instruction: string | {op: string, value: number}) => boolean} */
     execInstruction(instruction) {
-        const {op, value} = this.parseInstruction(instruction);
+        const {op, value} = typeof instruction === 'string' ? this.parseInstruction(instruction) : instruction;
         return this[`op_${op}`](value);
     }
 

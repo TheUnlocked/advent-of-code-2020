@@ -5,21 +5,24 @@ import Computer from './cpu.js';
 
 const input = load(8).lines;
 
-let change = 0;
+const mainCpu = new Computer(input);
+mainCpu.run();
 
-while (true) {
+let change = 0;
+let skipped = 0;
+
+while (change < input.length) {
     const original = input[change];
-    switch (original.slice(0, 3)) {
-        case 'nop':
-            input[change] = "jmp" + original.slice(3);
-            break;
-        case 'jmp':
-            input[change] = "nop" + original.slice(3);
-            break;
-        default:
-            change++;
-            continue;
+    
+    const {op, value} = mainCpu.parseInstruction(original);
+    const shift = op === 'jmp' ? 1 : value;
+    if (!['jmp', 'nop'].includes(op) || !mainCpu.visited[change] || (mainCpu.visited[change + shift] ?? Infinity) < mainCpu.visited[change]) {
+        skipped++;
+        change++;
+        continue;
     }
+
+    input[change] = {op: op === 'jmp' ? 'nop' : 'jmp', value};
 
     const cpu = new Computer(input);
     if (cpu.run() === 'terminate') {
@@ -30,3 +33,6 @@ while (true) {
     input[change] = original;
     change++;
 }
+
+
+console.log(`Skipped ${skipped}/${input.length} (${(100 * skipped / input.length).toPrecision(3)}%) instructions`);
