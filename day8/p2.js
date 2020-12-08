@@ -16,7 +16,12 @@ while (change < input.length) {
     
     const {op, value} = mainCpu.parseInstruction(original);
     const shift = op === 'jmp' ? 1 : value;
-    if (!['jmp', 'nop'].includes(op) || !mainCpu.visited[change] || (mainCpu.visited[change + shift] ?? Infinity) < mainCpu.visited[change]) {
+
+    if (!['jmp', 'nop'].includes(op)) {
+        change++;
+        continue;
+    }
+    if (!mainCpu.visited[change] || (mainCpu.visited[change + shift] ?? Infinity) < mainCpu.visited[change]) {
         skipped++;
         change++;
         continue;
@@ -27,6 +32,7 @@ while (change < input.length) {
     const cpu = new Computer(input);
     if (cpu.run() === 'terminate') {
         console.log(cpu.acc);
+        input[change] = original;
         break;
     }
 
@@ -35,4 +41,5 @@ while (change < input.length) {
 }
 
 
-console.log(`Skipped ${skipped}/${input.length} (${(100 * skipped / input.length).toPrecision(3)}%) instructions`);
+const testedCt = input.slice(0, change + 1).filter(x => ['jmp', 'nop'].includes(x.slice(0, 3))).length;
+console.log(`Skipped checking ${skipped}/${testedCt} (${(100 * skipped / testedCt).toPrecision(3)}%) visited jmp/nop instructions`);
