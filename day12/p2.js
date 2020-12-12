@@ -20,16 +20,12 @@ for (const line of input) {
         case 'W': x -= dist; break;
         case 'L':
             for (let i = 0; i < dist / 90; i++) {
-                let tmp = x;
-                x = -y;
-                y = tmp;
+                [x, y] = [-y, x];
             }
             break;
         case 'R':
             for (let i = 0; i < dist / 90; i++) {
-                let tmp = x;
-                x = y;
-                y = -tmp;
+                [x, y] = [y, -x];
             }
             break;
         case 'F':
