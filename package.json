@@ -1,3 +1,7 @@
 {
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "bignum": "^0.13.1",
+        "nodejs-chinese-remainder": "^0.0.6"
+    }
 }
