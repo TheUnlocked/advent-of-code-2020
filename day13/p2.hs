@@ -28,7 +28,7 @@ crt remainders mods =
 
 main :: IO ()
 main = do
-    -- Run from outside git root folder
+    -- Run from in git root folder
     contents <- readFile "./inputs/day13"
     let busInfo = splitOn "\n" contents !! 1
             |> splitOn ","
