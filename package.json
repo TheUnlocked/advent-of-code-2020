@@ -2,6 +2,7 @@
     "type": "module",
     "dependencies": {
         "bignum": "^0.13.1",
+        "int64_t": "^0.10.1",
         "nodejs-chinese-remainder": "^0.0.6"
     }
 }
