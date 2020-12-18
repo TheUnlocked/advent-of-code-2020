@@ -1,0 +1,3 @@
+.antlr
+lang*
+!lang.g4
