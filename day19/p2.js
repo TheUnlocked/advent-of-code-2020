@@ -13,15 +13,17 @@ rules[11] = [['42', '31'], ['42', '11', '31']];
 
 // Turns out we can set an upper limit on the recursion depth and it will work for this problem.
 // This is of course much easier to implement than actual support for a recursive grammar.
-function genRegexp(ruleNumber, maxDepth = 40) {
+function genRegexp(ruleNumber, maxDepth) {
     if (maxDepth < 0) return "";
     const opts = rules[ruleNumber];
     if (opts[0][0].startsWith('"')) {
         return opts[0][0].slice(1, 2);
     }
-    return "(" + opts.map(x => x.map(x => genRegexp(x, maxDepth - 1)).join("")).join('|') + ")";
+    return "(?:" + opts.map(x => x.map(x => genRegexp(x, maxDepth - 1)).join("")).join('|') + ")";
 }
 
-const regexp = new RegExp("^" + genRegexp(0) + "$");
+// Dividing the max input length by 4 is probably safe, and it saves a bit of time.
+// If it doesn't work, just delete the division.
+const regexp = new RegExp("^" + genRegexp(0, Math.max(..._messages.map(x => x.length)) / 4) + "$");
 
 console.log(_messages.filter(x => regexp.test(x)).length);

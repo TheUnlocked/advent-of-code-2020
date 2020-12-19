@@ -13,9 +13,9 @@ function genRegexp(ruleNumber) {
     if (opts[0][0].startsWith('"')) {
         return opts[0][0].slice(1, 2);
     }
-    return "(" + opts.map(x => x.map(x => genRegexp(x)).join("")).join('|') + ")";
+    return "(?:" + opts.map(x => x.map(x => genRegexp(x)).join("")).join('|') + ")";
 }
-console.log(genRegexp(0));
+
 const regexp = new RegExp("^" + genRegexp(0) + "$");
 
 console.log(_messages.filter(x => regexp.test(x)).length);
